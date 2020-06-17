@@ -9,6 +9,7 @@ const CreatePostPage = ({ errors, createPost, loading, history }) => {
    const [post, setPost] = useState({
       title: "",
       body: "",
+      videoURL: "",
       errors: {}
    });
 
@@ -33,8 +34,8 @@ const CreatePostPage = ({ errors, createPost, loading, history }) => {
 
    const handleSubmit = e => {
       e.preventDefault();
-      const { title, body } = post;
-      createPost({ title, body }, history);
+      const { title, body, videoURL } = post;
+      createPost({ title, body, videoURL }, history);
    };
 
    return (

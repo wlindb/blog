@@ -5,7 +5,8 @@ import Input from "../form/Input";
 import Textarea from "../form/Textarea";
 
 const PostForm = ({ post, onChange, onBlur, loading, onSubmit }) => {
-   const { title, body, errors } = post;
+   const { title, body, videoURL, errors } = post;
+   console.log('POSTFORM ', post);
    return (
       <Container>
          <Row>
@@ -34,6 +35,19 @@ const PostForm = ({ post, onChange, onBlur, loading, onSubmit }) => {
                         module: "post",
                         label: "Description",
                         error: errors.body
+                     }}
+                  />
+                  <Input
+                     name="videoURL"
+                     type="text"
+                     placeholder="YouTube url for application demo"
+                     value={videoURL}
+                     onChange={onChange}
+                     onBlur={onBlur}
+                     text={{
+                        module: "post",
+                        label: "YouTube URL",
+                        error: errors.title
                      }}
                   />
                   <Button

@@ -10,6 +10,10 @@ const post = {
       type: String,
       required: true
    },
+   videoURL: {
+      type: String,
+      required: true
+   },
    author: {
       type: String,
       required: true

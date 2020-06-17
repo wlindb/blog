@@ -17,6 +17,7 @@ const UpdatePostPage = ({
    const [post, setPost] = useState({
       title: "",
       body: "",
+      videoURL: "",
       errors: {}
    });
 
@@ -29,6 +30,7 @@ const UpdatePostPage = ({
       setPost(post => ({
          title: currentPost.title,
          body: currentPost.body,
+         videoURL: currentPost.videoURL,
          errors: { ...post.errors }
       }));
    }, [currentPost]);
@@ -54,8 +56,8 @@ const UpdatePostPage = ({
 
    const handleSubmit = e => {
       e.preventDefault();
-      const { title, body } = post;
-      updatePost(currentPost._id, { title, body }, history);
+      const { title, body, videoURL } = post;
+      updatePost(currentPost._id, { title, body, videoURL }, history);
    };
 
    // to ensure that the post is loaded otherwise we would make uncontrolled form access error

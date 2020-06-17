@@ -14,6 +14,7 @@ import { setErrors, clearErrors } from "./errorActions";
 
 export const createPost = (postData, history) => dispatch => {
    dispatch(togglePostLoading());
+   console.log(postData);
    axios
       .post("/api/posts/create", postData)
       .then(res => {

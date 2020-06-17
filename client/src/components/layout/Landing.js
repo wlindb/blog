@@ -1,12 +1,11 @@
 import React from "react";
 import { Container } from "react-bootstrap";
+import pi from './pi.jpg';
 
 const Landing = () => {
    return (
       <Container>
-         <div>
-            Hello from Landing.js
-         </div>
+         <img src={pi} style={{width: 'inherit', height: 'inherit'}}/>
       </Container>
    );
 };

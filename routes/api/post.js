@@ -64,10 +64,10 @@ router.patch(
       if (!isValid) {
          return res.status(400).json(errors);
       }
-      const { title, body } = req.body;
+      const { title, body, videoURL } = req.body;
       Post.findOneAndUpdate(
          { author, _id: req.params.id },
-         { $set: { title, body } },
+         { $set: { title, body, videoURL } },
          { new: true }
       )
          .then(doc => res.status(200).json(doc))
