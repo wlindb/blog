@@ -14,6 +14,12 @@ const post = {
       type: String,
       required: true
    },
+   img: {
+      // type: Buffer,
+      data: Buffer,
+      contentType: String,
+      // required: true
+   },
    author: {
       type: String,
       required: true

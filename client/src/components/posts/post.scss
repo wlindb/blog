@@ -42,4 +42,17 @@ a:link {
    color: $subtitleColor;
 }
 
+.image-from-db-container {
+   height: 40vh;
+   width: 20vw;
+}
+
+.image-from-db-container img {
+   height: auto;
+   width: auto;
+   max-height: 40vh;
+   max-width: 20vw;
+
+}
+
 // #################################

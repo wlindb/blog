@@ -10,6 +10,7 @@ const CreatePostPage = ({ errors, createPost, loading, history }) => {
       title: "",
       body: "",
       videoURL: "",
+      img: null,
       errors: {}
    });
 
@@ -35,7 +36,20 @@ const CreatePostPage = ({ errors, createPost, loading, history }) => {
    const handleSubmit = e => {
       e.preventDefault();
       const { title, body, videoURL } = post;
-      createPost({ title, body, videoURL }, history);
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('body', body);
+      formData.append('videoURL', videoURL);
+      formData.append('img', post.img);
+      createPost(formData, history);
+   };
+
+   const handleImageChange = e => {
+      e.preventDefault();
+      setPost({
+         ...post,
+         img: e.target.files[0]
+      });
    };
 
    return (
@@ -43,6 +57,7 @@ const CreatePostPage = ({ errors, createPost, loading, history }) => {
          loading={loading}
          post={post}
          onChange={handleChange}
+         onImageChange={handleImageChange}
          onBlur={handleBlur}
          onSubmit={handleSubmit}
       />

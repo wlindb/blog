@@ -15,8 +15,17 @@ import { setErrors, clearErrors } from "./errorActions";
 export const createPost = (postData, history) => dispatch => {
    dispatch(togglePostLoading());
    console.log(postData);
+   // const config = {
+   //    headers: {
+   //       'Content-Type': 'multipart/form-data'
+   //    }
+   // };
    axios
-      .post("/api/posts/create", postData)
+      .post("/api/posts/create", postData, {
+         headers: {
+            'Content-Type': 'multipart/form-data'
+         }
+      })
       .then(res => {
          dispatch({
             type: CREATE_POST,
@@ -31,14 +40,30 @@ export const createPost = (postData, history) => dispatch => {
       });
 };
 
+const arrayBufferToBlob = (buffer) => {
+   var arrayBufferView = new Uint8Array(buffer);
+   var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
+   // var urlCreator = window.URL || window.webkitURL;
+   // var imageUrl = urlCreator.createObjectURL( blob );
+   // console.log(blob);
+   return blob;
+}
+
 export const getPostByID = id => dispatch => {
    dispatch(togglePostLoading());
    axios
       .get(`/api/posts/post/${id}`)
       .then(res => {
+         console.log('getPostByID ',res.data);
+         const post = res.data[0];
+         const imageBlob = arrayBufferToBlob(post.img.data.data);
+         console.log('innan');
+         
+         post.img = imageBlob;
+         console.log(post);
          dispatch({
             type: GET_POST,
-            payload: res.data
+            payload: [post]
          });
          dispatch(clearErrors());
          dispatch(togglePostLoading());
@@ -88,7 +113,11 @@ export const getPosts = () => dispatch => {
 export const updatePost = (id, postData, history) => dispatch => {
    dispatch(togglePostLoading());
    axios
-      .patch(`/api/posts/update/${id}`, postData)
+      .post(`/api/posts/update/${id}`, postData, {
+         headers: {
+            'Content-Type': undefined
+         }
+      })
       .then(res => {
          dispatch({
             type: UPDATE_POST,

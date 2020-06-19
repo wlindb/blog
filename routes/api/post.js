@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../../models/Post");
 const passport = require("passport");
+const path = require('path');
 const validatePostInput = require("../../validation/post");
+const fs = require('fs');
+const multer = require("multer");
 
 
 router.get(
@@ -36,18 +39,50 @@ router.get("/author/:author", (req, res) => {
       );
 });
 
+//Set Storage Engine
+const storage = multer.diskStorage({
+   destination: './public/uploads/images',
+   filename: function (req, file, cb) {
+      console.log(file)
+       cb(null, file.fieldname + '-' + Date.now() + 
+   path.extname(file.originalname));
+   }
+});
+
+
+const upload = multer({
+   storage: storage
+});
+
+
 router.post(
    "/create",
+   upload.single('img'),
    passport.authenticate("jwt", { session: false }),
    (req, res) => {
       const author = req.user.user_name;
-      const post = req.body;
+      let post = req.body;
+      console.log('req.body =\n', req.body);
+      console.log('=============\nreq.file =\n', req.file);
       const { errors, isValid } = validatePostInput(post);
       if (!isValid) {
+         console.log('NOT VALID TAKEN!\n', errors);
          return res.status(400).json(errors);
       }
       post.author = author;
+   //    // post.image.data = await fs.readFile(req.body.image);
+   //    // post.image.contentType = 'image/png';
+   //    console.log(' =============== \n ', Object.keys(req.body.image), '=======');
+      
+      post.img = {};
+      post.img.data = fs.readFileSync(req.file.path);
+      post.img.contentType = 'image/png';
+      console.log(post);
+      
       const newPost = new Post(post);
+      console.log('=======================');
+      console.log(newPost);
+      console.log('=======================');
       newPost
          .save()
          .then(doc => res.json(doc))
@@ -55,8 +90,9 @@ router.post(
    }
 );
 
-router.patch(
+router.post(
    "/update/:id",
+   upload.single('img'),
    passport.authenticate("jwt", { session: false }),
    (req, res) => {
       const author = req.user.user_name;
@@ -65,9 +101,10 @@ router.patch(
          return res.status(400).json(errors);
       }
       const { title, body, videoURL } = req.body;
+      const img = { data: fs.readFileSync(req.file.path), contentType: 'image/png' };
       Post.findOneAndUpdate(
          { author, _id: req.params.id },
-         { $set: { title, body, videoURL } },
+         { $set: { title, body, videoURL, img } },
          { new: true }
       )
          .then(doc => res.status(200).json(doc))

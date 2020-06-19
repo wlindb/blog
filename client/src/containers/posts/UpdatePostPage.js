@@ -18,6 +18,7 @@ const UpdatePostPage = ({
       title: "",
       body: "",
       videoURL: "",
+      img: null,
       errors: {}
    });
 
@@ -27,10 +28,12 @@ const UpdatePostPage = ({
 
    // updating the local state of post with the received post data
    useEffect(() => {
+      // const imageBlob = arrayBufferToBlob(currentPost.img.data.data);
       setPost(post => ({
          title: currentPost.title,
          body: currentPost.body,
          videoURL: currentPost.videoURL,
+         img: currentPost.img, //imageBlob,
          errors: { ...post.errors }
       }));
    }, [currentPost]);
@@ -40,6 +43,15 @@ const UpdatePostPage = ({
          return { ...post, errors };
       });
    }, [errors]);
+
+   // const arrayBufferToBlob = (buffer) => {
+   //    var arrayBufferView = new Uint8Array(buffer);
+   //    var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
+   //    // var urlCreator = window.URL || window.webkitURL;
+   //    // var imageUrl = urlCreator.createObjectURL( blob );
+   //    // console.log(blob);
+   //    return blob;
+   // }
 
    const handleChange = e => {
       setPost({
@@ -57,7 +69,20 @@ const UpdatePostPage = ({
    const handleSubmit = e => {
       e.preventDefault();
       const { title, body, videoURL } = post;
-      updatePost(currentPost._id, { title, body, videoURL }, history);
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('body', body);
+      formData.append('videoURL', videoURL);
+      formData.append('img', post.img);
+      updatePost(currentPost._id, formData, history);
+   };
+
+   const handleImageChange = e => {
+      e.preventDefault();
+      setPost({
+         ...post,
+         img: e.target.files[0]
+      });
    };
 
    // to ensure that the post is loaded otherwise we would make uncontrolled form access error
@@ -70,6 +95,7 @@ const UpdatePostPage = ({
          loading={loading}
          post={post}
          onChange={handleChange}
+         onImageChange={handleImageChange}
          onBlur={handleBlur}
          onSubmit={handleSubmit}
       />
