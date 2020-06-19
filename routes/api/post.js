@@ -43,8 +43,7 @@ router.get("/author/:author", (req, res) => {
 const storage = multer.diskStorage({
    destination: './public/uploads/images',
    filename: function (req, file, cb) {
-      console.log(file)
-       cb(null, file.fieldname + '-' + Date.now() + 
+      cb(null, file.fieldname + '-' + Date.now() + 
    path.extname(file.originalname));
    }
 });
@@ -62,27 +61,16 @@ router.post(
    (req, res) => {
       const author = req.user.user_name;
       let post = req.body;
-      console.log('req.body =\n', req.body);
-      console.log('=============\nreq.file =\n', req.file);
       const { errors, isValid } = validatePostInput(post);
       if (!isValid) {
-         console.log('NOT VALID TAKEN!\n', errors);
          return res.status(400).json(errors);
       }
       post.author = author;
-   //    // post.image.data = await fs.readFile(req.body.image);
-   //    // post.image.contentType = 'image/png';
-   //    console.log(' =============== \n ', Object.keys(req.body.image), '=======');
-      
       post.img = {};
       post.img.data = fs.readFileSync(req.file.path);
       post.img.contentType = 'image/png';
-      console.log(post);
       
       const newPost = new Post(post);
-      console.log('=======================');
-      console.log(newPost);
-      console.log('=======================');
       newPost
          .save()
          .then(doc => res.json(doc))

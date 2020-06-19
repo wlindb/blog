@@ -14,12 +14,6 @@ import { setErrors, clearErrors } from "./errorActions";
 
 export const createPost = (postData, history) => dispatch => {
    dispatch(togglePostLoading());
-   console.log(postData);
-   // const config = {
-   //    headers: {
-   //       'Content-Type': 'multipart/form-data'
-   //    }
-   // };
    axios
       .post("/api/posts/create", postData, {
          headers: {
@@ -43,9 +37,6 @@ export const createPost = (postData, history) => dispatch => {
 const arrayBufferToBlob = (buffer) => {
    var arrayBufferView = new Uint8Array(buffer);
    var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
-   // var urlCreator = window.URL || window.webkitURL;
-   // var imageUrl = urlCreator.createObjectURL( blob );
-   // console.log(blob);
    return blob;
 }
 
@@ -54,13 +45,9 @@ export const getPostByID = id => dispatch => {
    axios
       .get(`/api/posts/post/${id}`)
       .then(res => {
-         console.log('getPostByID ',res.data);
          const post = res.data[0];
          const imageBlob = arrayBufferToBlob(post.img.data.data);
-         console.log('innan');
-         
          post.img = imageBlob;
-         console.log(post);
          dispatch({
             type: GET_POST,
             payload: [post]
@@ -115,7 +102,7 @@ export const updatePost = (id, postData, history) => dispatch => {
    axios
       .post(`/api/posts/update/${id}`, postData, {
          headers: {
-            'Content-Type': undefined
+            'Content-Type': 'multipart/form-data'
          }
       })
       .then(res => {

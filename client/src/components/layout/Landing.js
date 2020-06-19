@@ -5,7 +5,7 @@ import pi from './pi.jpg';
 const Landing = () => {
    return (
       <Container>
-         <img src={pi} style={{width: 'inherit', height: 'inherit'}}/>
+         <img alt='pi' src={pi} style={{width: 'inherit', height: 'inherit'}}/>
       </Container>
    );
 };

@@ -44,15 +44,6 @@ const UpdatePostPage = ({
       });
    }, [errors]);
 
-   // const arrayBufferToBlob = (buffer) => {
-   //    var arrayBufferView = new Uint8Array(buffer);
-   //    var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
-   //    // var urlCreator = window.URL || window.webkitURL;
-   //    // var imageUrl = urlCreator.createObjectURL( blob );
-   //    // console.log(blob);
-   //    return blob;
-   // }
-
    const handleChange = e => {
       setPost({
          ...post,
